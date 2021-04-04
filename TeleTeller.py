@@ -26,7 +26,7 @@ def send_welcome(message):
 
 
 keyboard1 = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
-keyboard1.row('4', '6', '9')
+keyboard1.row(*emoji_length_options)
 
 @bot.message_handler(content_types=['text'])
 def send_story(message):
