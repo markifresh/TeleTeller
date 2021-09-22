@@ -1,0 +1,26 @@
+version: "3.9"  # 3.3
+services:
+  teller_bot:
+    environment:
+      - APP_PORT=${APP_PORT}
+      - TOKEN=${TOKEN}
+      - URL=${URL}
+      - HOST=${HOST}
+      - HOOK_ADDRESS=${HOOK_ADDRESS}
+      - SERVER_IP=${SERVER_IP}
+    build:
+      context: .
+      dockerfile: teller_bot.docker
+      args:
+        SERVER_IP: ${SERVER_IP}
+        TZ: ${TZ}
+    ports:
+      - ${APP_PORT}:${SERVER_PORT}
+    # restart: always
+
+# networks:
+#   telegram_networks:
+#     driver: bridge
+#     ipam:
+#       config:
+#         - subnet: 172.20.0.0/29

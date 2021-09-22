@@ -3,14 +3,22 @@ from emojis.db.db import EMOJI_DB
 from random import choice, choices
 from os import getenv
 import telebot
+from pathlib import Path
 
 TOKEN = getenv("TOKEN")
-URL = getenv("URL")
-PORT = getenv("PORT", 8443)
+PORT = getenv("APP_PORT")
+HOST = getenv("HOST")
+HOOK_ADDRESS = getenv("HOOK_ADDRESS")
 emojis_icons = [emoj.emoji for emoj in EMOJI_DB if emoj.unicode_version not in ("11.0", "12.0", "13.0")]
 
 bot = telebot.TeleBot(token=TOKEN)
-web_hook = bot.set_webhook(url=f'{URL}{TOKEN}')
+
+# removes hooks for current application
+if not bot.set_webhook(url=''):
+    exit(606)
+
+# set up a new hook
+web_hook = bot.set_webhook(url=f'{HOOK_ADDRESS}/{TOKEN}', certificate=Path('cert.pem').read_bytes())
 if not web_hook:
     exit(707)
 
@@ -57,9 +65,8 @@ def respond():
     json_string = request.get_data().decode('utf-8')
     update = telebot.types.Update.de_json(json_string)
     bot.process_new_updates([update])
-
     return 'ok'
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=PORT, threaded=True)
+    app.run(host=HOST, port=PORT, threaded=True, ssl_context=('cert.pem', 'key.pem'))
