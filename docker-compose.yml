@@ -24,3 +24,5 @@ services:
 #     ipam:
 #       config:
 #         - subnet: 172.20.0.0/29
+
+# docker-compose up --build --force-recreate --no-deps teller_bot

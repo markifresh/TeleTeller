@@ -9,7 +9,13 @@ TOKEN = getenv("TOKEN")
 PORT = getenv("APP_PORT")
 HOST = getenv("HOST")
 HOOK_ADDRESS = getenv("HOOK_ADDRESS")
-emojis_icons = [emoj.emoji for emoj in EMOJI_DB if emoj.unicode_version not in ("11.0", "12.0", "13.0")]
+
+# Setting up emojis according to version
+max_emoji_version = 12.0
+emojis_icons = []
+for emoji in EMOJI_DB:
+    if emoji.unicode_version and float(emoji.unicode_version) <= max_emoji_version:
+        emojis_icons.append(emoji.emoji)
 
 bot = telebot.TeleBot(token=TOKEN)
 
